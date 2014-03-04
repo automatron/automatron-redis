@@ -22,6 +22,11 @@ class RedisConfigManager(object):
         self.redis = yield ConnectionPool(**self._redis_config)
 
     @defer.inlineCallbacks
+    def shutdown(self):
+        if self.redis:
+            yield self.redis.disconnect()
+
+    @defer.inlineCallbacks
     def enumerate_servers(self):
         server_sections = yield self.redis.keys('automatron:server:*')
         servers = []
