@@ -147,15 +147,12 @@ class RedisConfigManager(object):
 
     @defer.inlineCallbacks
     def update_user_preference(self, server, username, preference, value):
-        masks = yield self.get_section_with_relevance('user.hostmask', server, None)
-        for mask_username, mask_relevance in masks.values():
-            if mask_username == username:
-                break
-        else:
+        _, email_relevance = yield self.get_value('user.email', server, None, username)
+        if email_relevance is None:
             log.msg('Something went terribly wrong, username %s was not found' % username)
             return
 
-        if mask_relevance == 0:
+        if email_relevance == 0:
             server = None
 
         yield self.update_value('user.pref', server, username, preference, value)
