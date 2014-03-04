@@ -94,7 +94,7 @@ class RedisConfigManager(object):
                 server = ''
 
         config_key = ('automatron:%s:%s:%s' % (section, server or '', channel or '')).rstrip(':')
-        self.redis.hset(config_key, key, new_value)
+        yield self.redis.hset(config_key, key, new_value)
 
     def update_plugin_value(self, plugin, server, channel, key, new_value):
         return self.update_value('plugin.%s' % plugin.name, server, channel, key, new_value)
