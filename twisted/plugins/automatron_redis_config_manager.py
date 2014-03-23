@@ -75,6 +75,10 @@ class RedisConfigManager(object):
     def get_plugin_section(self, plugin, server, channel):
         return self.get_section('plugin.%s' % plugin.name, server, channel)
 
+    def delete_section(self, section, server, channel):
+        path = ':'.join(['automatron:' + section, server or '', channel or '']).rstrip(':')
+        return self.redis.delete(path)
+
     @defer.inlineCallbacks
     def get_value(self, section, server, channel, key):
         paths = self._get_paths(section, server, channel)
@@ -103,6 +107,10 @@ class RedisConfigManager(object):
 
     def update_plugin_value(self, plugin, server, channel, key, new_value):
         return self.update_value('plugin.%s' % plugin.name, server, channel, key, new_value)
+
+    def delete_value(self, section, server, channel, key):
+        path = ':'.join(['automatron:' + section, server or '', channel or '']).rstrip(':')
+        return self.redis.hdel(path, key)
 
     @defer.inlineCallbacks
     def get_username_by_hostmask(self, server, user):
