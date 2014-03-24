@@ -2,7 +2,7 @@ import re
 from twisted.internet import defer
 from twisted.python import log
 from zope.interface import implements, classProvides
-from automatron.config import IConfigManager, IAutomatronConfigManagerFactory
+from automatron.controller.config import IConfigManager, IAutomatronConfigManagerFactory
 from automatron_redis.txredisapi import ConnectionPool
 from automatron_redis import build_redis_config
 
